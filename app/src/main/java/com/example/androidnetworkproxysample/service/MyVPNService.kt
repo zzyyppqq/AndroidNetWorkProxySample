@@ -5,6 +5,7 @@ import android.net.Network
 import android.net.VpnService
 import android.os.ParcelFileDescriptor
 import android.util.Log
+import com.example.androidnetworkproxysample.proxy.TcpProxyServer
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.net.DatagramSocket
@@ -27,6 +28,9 @@ class MyVPNService : VpnService(), Runnable {
     private var mVPNInputStream: FileInputStream? = null
 
     private val mPacket = ByteArray(MUTE_SIZE)
+
+    private var mTcpProxyServer: TcpProxyServer? = null
+
     override fun onCreate() {
         super.onCreate()
         Log.i(TAG, "onCreate")
@@ -36,28 +40,15 @@ class MyVPNService : VpnService(), Runnable {
         vpnThread?.start()
     }
 
-    override fun onStart(intent: Intent?, startId: Int) {
-        super.onStart(intent, startId)
-        Log.i(TAG, "onStart")
-    }
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.i(TAG, "onStartCommand")
-        return super.onStartCommand(intent, flags, startId)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.i(TAG, "onDestroy")
-        VpnServiceHelper.onVpnServiceDestroy()
-        isRunning = false
-        vpnThread?.interrupt()
-        vpnThread = null
-    }
-
-
     override fun run() {
         try {
+            Log.i(TAG, "MyVPNService work thread is Running...")
+            waitUntilPrepared()
+
+            //启动TCP代理服务
+            mTcpProxyServer = TcpProxyServer(0)
+            mTcpProxyServer?.start()
+
             while (isRunning) {
                 mVPNInterface = establishVPN()
                 startStream()
@@ -66,6 +57,17 @@ class MyVPNService : VpnService(), Runnable {
             e.printStackTrace()
         } finally {
             dispose()
+        }
+    }
+
+    private fun waitUntilPrepared() {
+        // 如果 VPN 应用程序已准备好或者用户之前已同意 VPN 应用程序，则prepare()方法返回 null
+        while (prepare(this) != null) {
+            try {
+                Thread.sleep(100)
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+            }
         }
     }
 
@@ -146,6 +148,27 @@ class MyVPNService : VpnService(), Runnable {
         super.onRevoke()
         Log.i(TAG, "onRevoke")
     }
+
+
+    override fun onStart(intent: Intent?, startId: Int) {
+        super.onStart(intent, startId)
+        Log.i(TAG, "onStart")
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.i(TAG, "onStartCommand")
+        return super.onStartCommand(intent, flags, startId)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i(TAG, "onDestroy")
+        VpnServiceHelper.onVpnServiceDestroy()
+        isRunning = false
+        vpnThread?.interrupt()
+        vpnThread = null
+    }
+
 
     fun setVpnRunningStatus(stopStatus: Boolean) {
         isRunning = stopStatus
