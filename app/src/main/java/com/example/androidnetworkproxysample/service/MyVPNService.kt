@@ -5,7 +5,6 @@ import android.net.Network
 import android.net.VpnService
 import android.os.ParcelFileDescriptor
 import android.util.Log
-import com.example.androidnetworkproxysample.proxy.TcpProxyServer
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.net.DatagramSocket
@@ -15,7 +14,7 @@ class MyVPNService : VpnService(), Runnable {
     companion object {
         private const val TAG = "MyVPNService"
 
-        private const val MUTE_SIZE = 2560
+        const val MUTE_SIZE = 2560
     }
 
     private var vpnThread: Thread? = null
@@ -29,7 +28,6 @@ class MyVPNService : VpnService(), Runnable {
 
     private val mPacket = ByteArray(MUTE_SIZE)
 
-    private var mTcpProxyServer: TcpProxyServer? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -44,10 +42,6 @@ class MyVPNService : VpnService(), Runnable {
         try {
             Log.i(TAG, "MyVPNService work thread is Running...")
             waitUntilPrepared()
-
-            //启动TCP代理服务
-            mTcpProxyServer = TcpProxyServer(0)
-            mTcpProxyServer?.start()
 
             while (isRunning) {
                 mVPNInterface = establishVPN()

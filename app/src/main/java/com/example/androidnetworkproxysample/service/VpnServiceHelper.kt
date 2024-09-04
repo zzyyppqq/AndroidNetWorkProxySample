@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.VpnService
+import java.net.Socket
 
 object VpnServiceHelper {
     private var context: Context? = null
@@ -15,7 +16,7 @@ object VpnServiceHelper {
     fun onVpnServiceCreated(vpnService: MyVPNService) {
         sVpnService = vpnService
         if (context == null) {
-            context = vpnService.getApplicationContext()
+            context = vpnService.applicationContext
         }
     }
 
@@ -51,6 +52,10 @@ object VpnServiceHelper {
             return
         }
         context.startService(Intent(context, MyVPNService::class.java))
+    }
+
+    fun protect(socket: Socket): Boolean {
+        return sVpnService?.protect(socket)?:false
     }
 
 }

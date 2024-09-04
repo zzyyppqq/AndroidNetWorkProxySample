@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "AndroidNetWorkProxySample"
 include(":app")
- 
+include(":network_proxy_lib")

@@ -62,4 +62,8 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.7")
     implementation("com.github.tony19:logback-android:3.0.0")
 
+
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
 }

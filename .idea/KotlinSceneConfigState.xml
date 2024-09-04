@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SmartInputSourceKotlinSceneConfigState">
+    <option name="finalVariableCapitalScene" value="{&quot;capsLockState&quot;:true,&quot;code&quot;:&quot;finalVariableUpper&quot;,&quot;enable&quot;:false,&quot;languageType&quot;:&quot;ENGLISH&quot;,&quot;name&quot;:&quot;不可变常量&quot;,&quot;tip&quot;:&quot;光标处于不可变常量定义时切换为大写&quot;}" />
+  </component>
+</project>

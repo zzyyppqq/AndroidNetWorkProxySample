@@ -47,4 +47,38 @@
             android:text="vpn proxy stop"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_http_request"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="http request"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_websocket_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="websocket connect"/>
+
+        <Button
+            android:id="@+id/btn_websocket_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="websocket send"/>
+    </LinearLayout>
+
 </LinearLayout>
