@@ -1,4 +1,4 @@
-package com.example.androidnetworkproxysample.util
+package com.zyp.proxy.sample.util
 
 import android.util.Log
 import okhttp3.internal.ws.WebSocketProtocol

@@ -1,4 +1,4 @@
-package com.example.androidnetworkproxysample.service
+package com.zyp.proxy.sample.service
 
 import android.content.Intent
 import android.net.Network
@@ -10,7 +10,8 @@ import java.io.FileOutputStream
 import java.net.DatagramSocket
 import java.net.Socket
 
-class MyVPNService : VpnService(), Runnable {
+
+class MyVpnService : VpnService(), Runnable {
     companion object {
         private const val TAG = "MyVPNService"
 
@@ -32,7 +33,9 @@ class MyVPNService : VpnService(), Runnable {
     override fun onCreate() {
         super.onCreate()
         Log.i(TAG, "onCreate")
-        VpnServiceHelper.onVpnServiceCreated(this)
+        if (mVPNInterface == null) {
+            mVPNInterface = establishVPN()
+        }
         isRunning = true
         vpnThread = Thread(this)
         vpnThread?.start()
@@ -42,9 +45,7 @@ class MyVPNService : VpnService(), Runnable {
         try {
             Log.i(TAG, "MyVPNService work thread is Running...")
             waitUntilPrepared()
-
             while (isRunning) {
-                mVPNInterface = establishVPN()
                 startStream()
             }
         } catch (e: Throwable) {
@@ -107,15 +108,12 @@ class MyVPNService : VpnService(), Runnable {
     }
 
     private fun establishVPN(): ParcelFileDescriptor? {
-        val builder = Builder()
-        val ipAddress = ProxyConfig.Instance.defaultLocalIP
-        builder.addAddress(ipAddress.Address, ipAddress.PrefixLength)
-        Log.i(TAG, "addAddress: ${ipAddress.Address}, PrefixLength: ${ipAddress.PrefixLength}")
-        builder.addDnsServer("8.8.8.8")
-        builder.addRoute("0.0.0.0", 0)
-        builder.setMtu(MUTE_SIZE)
-        return builder.establish()
-
+        return Builder()
+            .addAddress("10.8.0.2", 32)
+            .addDnsServer("8.8.8.8")
+            .addRoute("0.0.0.0", 0)
+            .setMtu(MUTE_SIZE)
+            .establish()
     }
 
     override fun protect(socket: Int): Boolean {
@@ -157,7 +155,6 @@ class MyVPNService : VpnService(), Runnable {
     override fun onDestroy() {
         super.onDestroy()
         Log.i(TAG, "onDestroy")
-        VpnServiceHelper.onVpnServiceDestroy()
         isRunning = false
         vpnThread?.interrupt()
         vpnThread = null

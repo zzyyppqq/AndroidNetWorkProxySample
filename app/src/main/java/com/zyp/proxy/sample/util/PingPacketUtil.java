@@ -1,4 +1,4 @@
-package com.example.androidnetworkproxysample.util;
+package com.zyp.proxy.sample.util;
 
 import java.nio.ByteBuffer;
 

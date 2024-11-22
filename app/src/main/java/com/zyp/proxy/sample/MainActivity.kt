@@ -1,12 +1,16 @@
-package com.example.androidnetworkproxysample
+package com.zyp.proxy.sample
 
 import android.content.Intent
+import android.net.VpnService
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.example.androidnetworkproxysample.service.VpnServiceHelper
-import com.example.androidnetworkproxysample.util.OkHttpManager
-import com.example.androidnetworkproxysample.util.WebSocketManager
+import com.zyp.proxy.sample.service.LocalVpnService
+import com.zyp.proxy.sample.service.ToyVpnService
+import com.zyp.proxy.sample.util.OkHttpManager
+import com.zyp.proxy.sample.util.ProxyManager
+import com.zyp.proxy.sample.util.WebSocketManager
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -26,11 +30,11 @@ class MainActivity : AppCompatActivity() {
         }
 
          findViewById<Button>(R.id.btn_vpn_proxy_start).setOnClickListener {
-             VpnServiceHelper.changeVpnRunningStatus(this,true)
+             startVPN()
         }
 
         findViewById<Button>(R.id.btn_vpn_proxy_end).setOnClickListener {
-            VpnServiceHelper.changeVpnRunningStatus(this,false)
+            stopVPN()
         }
 
         findViewById<Button>(R.id.btn_http_request).setOnClickListener {
@@ -55,10 +59,31 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+//    private val clazz =  ToyVpnService::class.java
+    private val clazz =  LocalVpnService::class.java
+    private fun startVPN() {
+        val intent = VpnService.prepare(this)
+        if (intent != null) {
+            startActivityForResult(intent, 0)
+        } else {
+            onActivityResult(0, RESULT_OK, null)
+        }
+    }
+
+    private fun stopVPN() {
+        val intent = Intent(this, clazz)
+        stopService(intent)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == VpnServiceHelper.START_VPN_SERVICE_REQUEST_CODE && resultCode == RESULT_OK) {
-            VpnServiceHelper.startVpnService(this)
+        if (resultCode === RESULT_OK) {
+            val prefix = packageName
+            val intent: Intent = Intent(this, clazz)
+                .putExtra("$prefix.ADDRESS", "")
+                .putExtra("$prefix.PORT", "")
+                .putExtra("$prefix.SECRET", "")
+            startService(intent)
         }
     }
 

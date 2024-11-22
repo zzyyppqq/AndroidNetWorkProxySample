@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.androidnetworkproxysample"
+    namespace = "com.zyp.proxy.sample"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.androidnetworkproxysample"
+        applicationId = "com.zyp.proxy.sample"
         minSdk = 21
         targetSdk = 33
         versionCode = 1

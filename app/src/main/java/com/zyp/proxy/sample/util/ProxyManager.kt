@@ -1,13 +1,10 @@
-package com.example.androidnetworkproxysample
+package com.zyp.proxy.sample.util
 
 import android.util.Log
-import io.netty.util.internal.logging.Log4J2LoggerFactory
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.lightbody.bmp.BrowserMobProxy
 import net.lightbody.bmp.BrowserMobProxyServer
-import org.apache.commons.logging.impl.SLF4JLogFactory
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 

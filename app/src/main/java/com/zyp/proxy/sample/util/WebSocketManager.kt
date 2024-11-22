@@ -1,4 +1,4 @@
-package com.example.androidnetworkproxysample.util
+package com.zyp.proxy.sample.util
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
